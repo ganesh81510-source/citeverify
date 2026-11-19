@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CiteVerify — Scientific Claim &amp; Citation Verification System</title>
+  <title>Citelens — Scientific Claim &amp; Citation Verification System</title>
+  <link id="brandFavicon" rel="icon" type="image/jpeg" href="" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -352,22 +353,55 @@
       }
       .cv-welcome-badge {
         opacity: 0;
-        animation: cvWelcomeBadgePop 0.65s cubic-bezier(0.22, 1.25, 0.36, 1) 0.08s forwards;
+        position: relative;
+        overflow: hidden;
+        animation: cvWelcomeBadgePop 0.75s cubic-bezier(0.22, 1.25, 0.36, 1) 0.08s forwards;
+      }
+      .cv-welcome-badge::after {
+        content: "";
+        position: absolute;
+        top: 0; left: -130%; width: 70%; height: 100%;
+        background: linear-gradient(110deg, transparent 0%, rgba(255,255,255,0.12) 38%, rgba(243,223,168,0.52) 50%, rgba(255,255,255,0.12) 62%, transparent 100%);
+        transform: skewX(-20deg);
+        animation: cvLogoSweep 1.1s var(--ease-executive) 0.62s forwards;
+        pointer-events: none;
       }
       @keyframes cvWelcomeBadgePop {
-        0% { opacity: 0; transform: scale(0.45) rotate(-10deg); }
-        100% { opacity: 1; transform: scale(1) rotate(0deg); }
+        0% { opacity: 0; transform: scale(0.38) rotate(-8deg) translateY(14px); }
+        70% { opacity: 1; transform: scale(1.05) rotate(1.5deg) translateY(0); }
+        100% { opacity: 1; transform: scale(1) rotate(0deg) translateY(0); }
       }
-      .cv-welcome-rise-1 { opacity: 0; animation: cvWelcomeRise 0.55s var(--ease-executive) 0.26s forwards; }
-      .cv-welcome-rise-2 { opacity: 0; animation: cvWelcomeRise 0.6s var(--ease-executive) 0.40s forwards; }
-      .cv-welcome-rise-3 { opacity: 0; animation: cvWelcomeRise 0.55s var(--ease-executive) 0.54s forwards; }
+      @keyframes cvLogoSweep {
+        0% { transform: translateX(0) skewX(-20deg); }
+        100% { transform: translateX(420%) skewX(-20deg); }
+      }
+      .cv-welcome-brand {
+        opacity: 0;
+        background: linear-gradient(100deg, #FFFFFF 0%, #F3DFA8 35%, #d1b47b 55%, #7FE0E8 80%, #FFFFFF 100%);
+        background-size: 220% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: cvWelcomeBrandReveal 0.85s var(--ease-executive) 0.24s forwards, cvBrandShimmer 2.4s linear 0.55s infinite;
+      }
+      @keyframes cvWelcomeBrandReveal {
+        0% { opacity: 0; letter-spacing: 0.28em; transform: translateY(18px) scale(0.92); filter: blur(6px); }
+        100% { opacity: 1; letter-spacing: -0.02em; transform: translateY(0) scale(1); filter: blur(0); }
+      }
+      @keyframes cvBrandShimmer {
+        0% { background-position: 0% center; }
+        100% { background-position: 220% center; }
+      }
+      .cv-welcome-rise-1 { opacity: 0; animation: cvWelcomeRise 0.55s var(--ease-executive) 0.42s forwards; }
+      .cv-welcome-rise-2 { opacity: 0; animation: cvWelcomeRise 0.6s var(--ease-executive) 0.56s forwards; }
+      .cv-welcome-rise-3 { opacity: 0; animation: cvWelcomeRise 0.55s var(--ease-executive) 0.70s forwards; }
       @keyframes cvWelcomeRise {
-        0% { opacity: 0; transform: translateY(18px); }
+        0% { opacity: 0; transform: translateY(16px); }
         100% { opacity: 1; transform: translateY(0); }
       }
       .cv-welcome-bar-fill {
         transform-origin: left center; transform: scaleX(0);
-        animation: cvWelcomeProgress 1.65s var(--ease-executive) 0.2s forwards;
+        animation: cvWelcomeProgress 1.85s var(--ease-executive) 0.25s forwards;
       }
       @keyframes cvWelcomeProgress {
         0% { transform: scaleX(0); }
@@ -412,12 +446,12 @@
       <div class="lg:col-span-5 p-8 sm:p-10 flex flex-col justify-between text-white relative overflow-hidden" style="background: linear-gradient(155deg, #12626c 0%, #0A3A40 65%, #07282C 100%); border-right: 2px solid #d1b47b;">
         <div class="absolute -top-20 -right-20 w-64 h-64 rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(209,180,123,0.18) 0%, transparent 70%);"></div>
         <div class="relative z-10">
-          <div class="flex items-center gap-3 mb-8">
-            <div class="w-11 h-11 rounded-2xl flex items-center justify-center border shadow-md" style="background-color: rgba(209, 180, 123, 0.2); border-color: #d1b47b; color: #d1b47b;">
-              <i data-lucide="shield-check" class="w-6 h-6"></i>
+          <div class="flex items-center gap-3.5 mb-8">
+            <div class="w-12 h-12 rounded-2xl overflow-hidden border-2 shadow-lg shrink-0" style="background-color: #050b0c; border-color: #d1b47b; box-shadow: 0 0 18px rgba(209,180,123,0.28);">
+              <img class="citelens-logo-img w-full h-full object-cover" alt="Citelens Logo" />
             </div>
             <div>
-              <span class="text-xl font-extrabold tracking-tight text-white">CiteVerify</span>
+              <span class="text-2xl font-extrabold tracking-tight text-white">Citelens</span>
               <p class="text-[11px] uppercase tracking-widest font-semibold" style="color: #d1b47b;">Scientific Citation Audit</p>
             </div>
           </div>
@@ -473,7 +507,7 @@
         <!-- Login Tab -->
         <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="max-w-md mx-auto w-full space-y-4">
           <div class="text-center mb-4">
-            <h3 class="text-xl font-bold text-slate-900">Welcome back to CiteVerify</h3>
+            <h3 class="text-xl font-bold text-slate-900">Welcome back to Citelens</h3>
             <p class="text-xs text-slate-500 mt-1">Sign in to access your local verification workspace &amp; audit logs.</p>
           </div>
           <div id="loginErrorBanner" class="hidden rounded-xl border p-3 text-xs font-medium bg-rose-50 text-rose-800 border-rose-200 flex items-center gap-2">
@@ -578,12 +612,12 @@
     <header class="bg-[#0F172A] text-white border-b border-slate-800 sticky top-0 z-40 no-print">
       <div class="max-w-[1600px] mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl flex items-center justify-center border" style="background-color: rgba(209, 180, 123, 0.18); border-color: rgba(209, 180, 123, 0.55); color: #d1b47b;">
-            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          <div class="w-11 h-11 rounded-xl overflow-hidden border-2 shadow-md shrink-0" style="background-color: #050b0c; border-color: #d1b47b; box-shadow: 0 0 14px rgba(209,180,123,0.25);">
+            <img class="citelens-logo-img w-full h-full object-cover" alt="Citelens Logo" />
           </div>
           <div>
             <div class="flex items-center gap-2 flex-wrap">
-              <h1 class="text-base sm:text-lg font-bold tracking-tight text-white">CiteVerify</h1>
+              <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-white">Citelens</h1>
               <span class="hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold border" style="background-color: #d1b47b; color: #0F292E; border-color: rgba(15, 41, 46, 0.2);">Prototype v2.4</span>
               <span id="navScanCountPill" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border" style="background-color: rgba(255,255,255,0.12); border-color: rgba(209,180,123,0.4); color: #FFFFFF;">
                 <i data-lucide="activity" class="w-3 h-3" style="color:#d1b47b;"></i>
@@ -883,7 +917,7 @@
         <div class="flex items-center gap-2.5">
           <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background-color: var(--ambient-teal); color: var(--brand-primary);"><i data-lucide="phone-call" class="w-4 h-4"></i></div>
           <div>
-            <h3 class="text-sm font-bold text-slate-900">Contact CiteVerify (Prototype Demo)</h3>
+            <h3 class="text-sm font-bold text-slate-900">Contact Citelens (Prototype Demo)</h3>
             <p class="text-[11px] text-slate-500">Hackathon Prototype Support &amp; Feedback Channel</p>
           </div>
         </div>
@@ -898,7 +932,7 @@
           </div>
           <div class="rounded-2xl border p-4 bg-slate-50/70">
             <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Demo Support Email</p>
-            <p class="text-sm font-bold text-slate-900 mt-1">contact@citeverify.demo</p>
+            <p class="text-sm font-bold text-slate-900 mt-1">contact@citelens.demo</p>
             <p class="text-[11px] text-slate-500 mt-0.5">Hackathon Prototype Inbox</p>
           </div>
         </div>
@@ -927,7 +961,7 @@
         <div class="flex items-center gap-2.5">
           <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background-color: var(--ambient-gold); color: var(--brand-accent-text);"><i data-lucide="compass" class="w-4 h-4"></i></div>
           <div>
-            <h3 class="text-sm font-bold text-slate-900">About CiteVerify &amp; How to Use</h3>
+            <h3 class="text-sm font-bold text-slate-900">About Citelens &amp; How to Use</h3>
             <p class="text-[11px] text-slate-500">Scientific Claim Verification Pipeline &amp; Verdict Guide</p>
           </div>
         </div>
@@ -937,11 +971,11 @@
         <div class="rounded-2xl border p-4 bg-slate-50/70">
           <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Our Mission</h4>
           <p class="text-xs leading-relaxed text-slate-700">
-            CiteVerify helps students, researchers, and reviewers detect AI-fabricated references, numerical misquoting, and retracted citations. By combining client-side manuscript parsing with live REST queries to <strong>Crossref</strong>, <strong>OpenAlex</strong>, and <strong>DataCite</strong>, users can inspect source-linked evidence before grading or publishing.
+            Citelens helps students, researchers, and reviewers detect AI-fabricated references, numerical misquoting, and retracted citations. By combining client-side manuscript parsing with live REST queries to <strong>Crossref</strong>, <strong>OpenAlex</strong>, and <strong>DataCite</strong>, users can inspect source-linked evidence before grading or publishing.
           </p>
         </div>
         <div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 mb-3">How to Use CiteVerify (5-Step Workflow)</h4>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 mb-3">How to Use Citelens (5-Step Workflow)</h4>
           <div class="grid grid-cols-1 sm:grid-cols-5 gap-2.5">
             <div class="rounded-2xl border p-3 bg-white text-center"><span class="w-6 h-6 rounded-full inline-flex items-center justify-center text-[11px] font-bold mb-1.5" style="background-color: var(--brand-primary); color: #fff;">1</span><p class="text-xs font-bold text-slate-900">Upload</p><p class="text-[11px] text-slate-500 mt-0.5">Drop a .PDF/.TXT or paste cited text with references.</p></div>
             <div class="rounded-2xl border p-3 bg-white text-center"><span class="w-6 h-6 rounded-full inline-flex items-center justify-center text-[11px] font-bold mb-1.5" style="background-color: var(--brand-primary); color: #fff;">2</span><p class="text-xs font-bold text-slate-900">Extract</p><p class="text-[11px] text-slate-500 mt-0.5">Detects [1], (Author, Year), and inline DOI citations.</p></div>
@@ -983,7 +1017,7 @@
       <div class="p-6 overflow-y-auto academic-scroll space-y-5 flex-1">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
           <div class="rounded-2xl border p-3.5 bg-slate-50/70"><span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Username</span><p class="font-semibold text-slate-900 mt-0.5 font-mono" id="profileUsernameVal">@expertise</p></div>
-          <div class="rounded-2xl border p-3.5 bg-slate-50/70"><span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Email Address</span><p class="font-semibold text-slate-900 mt-0.5" id="profileEmailVal">expertise@citeverify.demo</p></div>
+          <div class="rounded-2xl border p-3.5 bg-slate-50/70"><span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Email Address</span><p class="font-semibold text-slate-900 mt-0.5" id="profileEmailVal">expertise@citelens.demo</p></div>
         </div>
         <div class="rounded-2xl border p-4 bg-white">
           <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 mb-3">Local Session Activity</h4>
@@ -1053,26 +1087,27 @@
 
   <!-- CINEMATIC WELCOME SPLASH (PLAYS ON LOGIN / SIGN UP) -->
   <div id="welcomeSplash" onclick="dismissWelcomeAnimation()" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6 no-print cursor-pointer select-none overflow-hidden" role="status" aria-live="polite">
-    <div class="cv-welcome-aura absolute w-[520px] h-[520px] rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(209,180,123,0.28) 0%, rgba(18,98,108,0.16) 48%, transparent 72%);"></div>
-    <div class="relative z-10 flex flex-col items-center text-center max-w-lg w-full">
-      <div class="relative flex items-center justify-center mb-7">
-        <span class="cv-welcome-ring absolute w-24 h-24 rounded-full border-2 pointer-events-none" style="border-color: rgba(209, 180, 123, 0.7);"></span>
-        <span class="cv-welcome-ring-delay absolute w-24 h-24 rounded-full border pointer-events-none" style="border-color: rgba(209, 180, 123, 0.45);"></span>
-        <div class="cv-welcome-badge w-24 h-24 rounded-3xl flex items-center justify-center border-2 shadow-2xl" style="background: linear-gradient(145deg, rgba(209,180,123,0.28), rgba(18,98,108,0.55)); border-color: #d1b47b; color: #d1b47b; box-shadow: 0 0 42px rgba(209,180,123,0.38);">
-          <i data-lucide="shield-check" class="w-12 h-12"></i>
+    <div class="cv-welcome-aura absolute w-[560px] h-[560px] rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(209,180,123,0.30) 0%, rgba(18,98,108,0.18) 48%, transparent 72%);"></div>
+    <div class="relative z-10 flex flex-col items-center text-center max-w-xl w-full">
+      <div class="relative flex items-center justify-center mb-6">
+        <span class="cv-welcome-ring absolute w-32 h-32 sm:w-36 sm:h-36 rounded-full border-2 pointer-events-none" style="border-color: rgba(209, 180, 123, 0.72);"></span>
+        <span class="cv-welcome-ring-delay absolute w-32 h-32 sm:w-36 sm:h-36 rounded-full border pointer-events-none" style="border-color: rgba(209, 180, 123, 0.45);"></span>
+        <div class="cv-welcome-badge w-32 h-32 sm:w-36 sm:h-36 rounded-3xl border-2 shadow-2xl" style="background-color: #050b0c; border-color: #d1b47b; box-shadow: 0 0 48px rgba(209,180,123,0.42), 0 18px 40px rgba(0,0,0,0.5);">
+          <img class="citelens-logo-img w-full h-full object-cover" alt="Citelens Logo" />
         </div>
       </div>
-      <div class="cv-welcome-rise-1 inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-[0.2em] border mb-4" style="background-color: rgba(209,180,123,0.14); border-color: rgba(209,180,123,0.5); color: #d1b47b;">
+      <h1 class="cv-welcome-brand text-4xl sm:text-6xl font-extrabold leading-none mb-3">Citelens</h1>
+      <div class="cv-welcome-rise-1 inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-[0.2em] border mb-3" style="background-color: rgba(209,180,123,0.14); border-color: rgba(209,180,123,0.5); color: #d1b47b;">
         <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
         <span id="welcomeSplashTag">Authentication Verified</span>
       </div>
-      <h2 id="welcomeSplashTitle" class="cv-welcome-rise-2 text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+      <h2 id="welcomeSplashTitle" class="cv-welcome-rise-2 text-2xl sm:text-3xl font-bold tracking-tight text-white leading-tight">
         Welcome back!
       </h2>
-      <p id="welcomeSplashSub" class="cv-welcome-rise-3 text-sm sm:text-base text-teal-100/85 mt-3 max-w-md">
-        Launching your CiteVerify Scientific Citation Audit Workspace...
+      <p id="welcomeSplashSub" class="cv-welcome-rise-3 text-xs sm:text-sm text-teal-100/80 mt-2 max-w-md">
+        Launching your Citelens Scientific Citation Audit Workspace...
       </p>
-      <div class="cv-welcome-rise-3 w-64 sm:w-72 h-1.5 rounded-full overflow-hidden mt-7" style="background-color: rgba(255,255,255,0.14);">
+      <div class="cv-welcome-rise-3 w-64 sm:w-72 h-1.5 rounded-full overflow-hidden mt-6" style="background-color: rgba(255,255,255,0.14);">
         <div id="welcomeSplashBar" class="cv-welcome-bar-fill h-full w-full rounded-full" style="background: linear-gradient(90deg, #197B88, #d1b47b, #F3DFA8);"></div>
       </div>
       <p class="cv-welcome-rise-3 text-[11px] text-teal-200/60 mt-4 tracking-wide">Click anywhere to continue immediately</p>
@@ -1087,6 +1122,7 @@
     // =========================================================================
     // SECTION 1: CONFIG & CONSTANTS
     // =========================================================================
+    const CITELENS_LOGO_SRC = 'data:image/jpeg;base64,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';
     const ACCOUNTS_KEY = 'citeverify-accounts-v2';
     const SESSION_KEY = 'citeverify-session-v2';
     const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB strict limit
@@ -1232,8 +1268,8 @@
         username: 'expertise',
         salt,
         passwordHash: hashPassword('citeverify', salt),
-        fullName: 'Dr. Elena Vance',
-        email: 'expertise@citeverify.demo',
+        fullName: 'Dr. Elena Vance (example)',
+        email: 'expertise@citelens.demo',
         role: 'Lead Reviewer • Research Integrity Lab',
         scansCount: 3,
         notifications: { alerts: true, weekly: false }
@@ -1457,7 +1493,7 @@
       const displayName = (account && (account.fullName || account.username)) || 'Reviewer';
 
       if (!splash || prefersReducedMotion()) {
-        showToast(isNewUser ? 'Account Created!' : `Welcome back, ${displayName}`, 'Signed in to CiteVerify.', isNewUser ? 'user-check' : 'shield-check');
+        showToast(isNewUser ? 'Account Created!' : `Welcome back, ${displayName}`, 'Signed in to Citelens.', isNewUser ? 'user-check' : 'shield-check');
         return;
       }
 
@@ -1470,12 +1506,12 @@
       if (tagEl) tagEl.textContent = isNewUser ? 'Account Created' : 'Authentication Verified';
       if (titleEl) titleEl.innerHTML = `${isNewUser ? 'Welcome' : 'Welcome back'}, <span style="color: #d1b47b;">${escapeHTML(displayName)}</span>`;
       if (subEl) subEl.textContent = isNewUser
-        ? 'Setting up your CiteVerify Scientific Citation Audit Workspace...'
-        : 'Launching your CiteVerify Scientific Citation Audit Workspace...';
+        ? 'Setting up your Citelens Scientific Citation Audit Workspace...'
+        : 'Launching your Citelens Scientific Citation Audit Workspace...';
 
       // Reset CSS animations cleanly for repeat logins in the same tab
       splash.classList.remove('hidden', 'is-exiting');
-      splash.querySelectorAll('.cv-welcome-aura, .cv-welcome-ring, .cv-welcome-ring-delay, .cv-welcome-badge, .cv-welcome-rise-1, .cv-welcome-rise-2, .cv-welcome-rise-3, .cv-welcome-bar-fill').forEach(el => {
+      splash.querySelectorAll('.cv-welcome-aura, .cv-welcome-ring, .cv-welcome-ring-delay, .cv-welcome-badge, .cv-welcome-brand, .cv-welcome-rise-1, .cv-welcome-rise-2, .cv-welcome-rise-3, .cv-welcome-bar-fill').forEach(el => {
         el.style.animation = 'none';
         void el.offsetWidth;
         el.style.animation = '';
@@ -1484,7 +1520,7 @@
 
       welcomeSplashTimer = setTimeout(() => {
         dismissWelcomeAnimation(displayName, isNewUser);
-      }, 1900);
+      }, 2200);
     }
 
     function dismissWelcomeAnimation(displayName, isNewUser) {
@@ -1504,7 +1540,7 @@
         splash.classList.add('hidden');
         splash.classList.remove('is-exiting');
         if (displayName) {
-          showToast(isNewUser ? 'Account Ready!' : `Welcome back, ${displayName}`, 'CiteVerify workspace ready for citation auditing.', isNewUser ? 'user-check' : 'shield-check');
+          showToast(isNewUser ? 'Account Ready!' : `Welcome back, ${displayName}`, 'Citelens workspace ready for citation auditing.', isNewUser ? 'user-check' : 'shield-check');
         }
       }, 450);
     }
@@ -3061,7 +3097,7 @@ References
       document.getElementById('printReportSection').innerHTML = `
         <div class="border-b-2 border-slate-900 pb-4 mb-6">
           <div class="flex items-baseline justify-between">
-            <div><h1 class="text-2xl font-bold text-slate-900">CiteVerify — Verification Report</h1><p class="text-sm text-slate-600 mt-0.5">Scientific Claim &amp; Citation Verification Audit</p></div>
+            <div class="flex items-center gap-3"><img src="${CITELENS_LOGO_SRC}" alt="Citelens Logo" class="w-11 h-11 rounded-xl border border-slate-300 object-cover" /><div><h1 class="text-2xl font-bold text-slate-900">Citelens — Verification Report</h1><p class="text-sm text-slate-600 mt-0.5">Scientific Claim &amp; Citation Verification Audit</p></div></div>
             <div class="text-right text-xs text-slate-600">
               <p><strong>Generated:</strong> ${escapeHTML(new Date().toLocaleString())}</p>
               <p><strong>Reviewer:</strong> ${escapeHTML(reviewerAcc ? `${reviewerAcc.fullName} (@${reviewerAcc.username})` : 'Academic Reviewer')}</p>
@@ -3119,7 +3155,17 @@ References
       setTimeout(() => window.print(), 120);
     }
 
+    function applyBrandLogos() {
+      document.querySelectorAll('.citelens-logo-img').forEach(img => {
+        if (!img.getAttribute('src')) img.setAttribute('src', CITELENS_LOGO_SRC);
+      });
+      const fav = document.getElementById('brandFavicon');
+      if (fav) fav.setAttribute('href', CITELENS_LOGO_SRC);
+    }
+    applyBrandLogos();
+
     document.addEventListener('DOMContentLoaded', () => {
+      applyBrandLogos();
       initTheme();
       getStoredAccounts();
       const activeAccount = getCurrentAccount();
