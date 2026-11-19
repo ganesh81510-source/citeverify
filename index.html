@@ -620,7 +620,7 @@
               </div>
               <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">Verify Every Claim. Trust Every Source.</h2>
               <p class="text-sm text-slate-600 leading-relaxed max-w-2xl">
-                Upload any manuscript, essay, or plain scientific text—with or without formal citations—to cross-examine factual claims against live Crossref &amp; OpenAlex scholarly metadata.
+                Upload any cited manuscript, research paper, or academic report to cross-examine inline claims and references against live Crossref, OpenAlex, and DataCite scholarly metadata.
               </p>
               <div class="flex flex-wrap items-center gap-3 pt-2">
                 <button onclick="loadDemo(1)" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-xs sm:text-sm font-bold shadow-md cv-backlight" style="background-color: var(--brand-primary); color: var(--brand-primary-text);">
@@ -637,7 +637,7 @@
               <div class="rounded-2xl border p-4 bg-slate-50/70 cv-hover-card">
                 <div class="w-8 h-8 rounded-full flex items-center justify-center mb-2" style="background-color: var(--ambient-teal); color: var(--brand-primary);"><i data-lucide="database" class="w-4 h-4"></i></div>
                 <p class="text-xs font-bold text-slate-900">Live API Lookup</p>
-                <p class="text-[11px] text-slate-500 mt-0.5">Queries Crossref &amp; OpenAlex REST APIs</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Queries Crossref, OpenAlex &amp; DataCite APIs</p>
               </div>
               <div class="rounded-2xl border p-4 bg-slate-50/70 cv-hover-card">
                 <div class="w-8 h-8 rounded-full flex items-center justify-center mb-2" style="background-color: var(--ambient-gold); color: var(--brand-accent-text);"><i data-lucide="shield-alert" class="w-4 h-4"></i></div>
@@ -646,8 +646,8 @@
               </div>
               <div class="rounded-2xl border p-4 bg-slate-50/70 cv-hover-card">
                 <div class="w-8 h-8 rounded-full flex items-center justify-center mb-2" style="background-color: var(--ambient-teal); color: var(--brand-primary);"><i data-lucide="search-check" class="w-4 h-4"></i></div>
-                <p class="text-xs font-bold text-slate-900">Uncited Auto-Discovery</p>
-                <p class="text-[11px] text-slate-500 mt-0.5">Finds real sources even for plain prose</p>
+                <p class="text-xs font-bold text-slate-900">Multi-Format Citations</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Parses [1], (Author, Year) &amp; inline DOIs</p>
               </div>
               <div class="rounded-2xl border p-4 bg-slate-50/70 cv-hover-card">
                 <div class="w-8 h-8 rounded-full flex items-center justify-center mb-2" style="background-color: var(--ambient-gold); color: var(--brand-accent-text);"><i data-lucide="printer" class="w-4 h-4"></i></div>
@@ -664,12 +664,12 @@
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden cv-hover-card cv-backlight">
           <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/70 flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h2 class="text-base font-bold text-slate-900">Submit Manuscript or Plain Text for Citation Audit</h2>
-              <p class="text-xs text-slate-500 mt-0.5">Upload a <code class="px-1 py-0.5 bg-slate-200/70 rounded text-slate-700">.pdf</code> or <code class="px-1 py-0.5 bg-slate-200/70 rounded text-slate-700">.txt</code> file (max 5 MB, 50,000 chars), or paste scientific text below.</p>
+              <h2 class="text-base font-bold text-slate-900">Submit Cited Manuscript for Verification Audit</h2>
+              <p class="text-xs text-slate-500 mt-0.5">Upload a <code class="px-1 py-0.5 bg-slate-200/70 rounded text-slate-700">.pdf</code> or <code class="px-1 py-0.5 bg-slate-200/70 rounded text-slate-700">.txt</code> file (max 5 MB, 50,000 chars), or paste text with citations &amp; references below.</p>
             </div>
             <div class="flex items-center gap-2 text-xs text-slate-500">
               <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">
-                <i data-lucide="globe" class="w-3.5 h-3.5"></i> Live Crossref &amp; OpenAlex APIs
+                <i data-lucide="globe" class="w-3.5 h-3.5"></i> Live Crossref, OpenAlex &amp; DataCite
               </span>
             </div>
           </div>
@@ -691,12 +691,20 @@
                 <label for="manuscriptText" class="text-xs font-semibold uppercase tracking-wider text-slate-600">Document Text &amp; References (Max 50,000 characters)</label>
                 <button onclick="clearInput()" class="text-xs text-slate-500 hover:text-slate-800 transition px-3 py-1 rounded-full">Clear text</button>
               </div>
-              <textarea id="manuscriptText" maxlength="50000" rows="11" placeholder="Paste scientific text with [1], (Author, 2023), inline DOIs, natural-language attributions ('According to a 2022 study...'), OR even uncited factual claims..." class="w-full rounded-2xl border border-slate-300 focus:border-slate-900 focus:ring-1 focus:ring-slate-900 p-4 text-sm text-slate-800 font-serif leading-relaxed bg-white shadow-inner"></textarea>
+              <textarea id="manuscriptText" oninput="hideReferenceWarning()" maxlength="50000" rows="11" placeholder="Paste scientific text with inline citations such as [1] (with a References section at the bottom), (Author, 2023), or inline DOIs (e.g., 10.1038/...)..." class="w-full rounded-2xl border border-slate-300 focus:border-slate-900 focus:ring-1 focus:ring-slate-900 p-4 text-sm text-slate-800 font-serif leading-relaxed bg-white shadow-inner"></textarea>
+            </div>
+            <div id="referenceWarningBanner" class="hidden rounded-2xl border p-4 bg-amber-50 text-amber-900 border-amber-300 flex items-start gap-3">
+              <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600 shrink-0 mt-0.5"></i>
+              <div class="flex-1 text-xs leading-relaxed">
+                <p id="referenceWarningTitle" class="font-bold text-amber-950">Please Attach a Reference</p>
+                <p id="referenceWarningMsg" class="mt-0.5 text-amber-900"></p>
+              </div>
+              <button type="button" onclick="hideReferenceWarning()" class="p-1 rounded-full hover:bg-amber-200/60 text-amber-800" title="Dismiss"><i data-lucide="x" class="w-4 h-4"></i></button>
             </div>
             <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
               <div class="text-xs text-slate-500 flex items-center gap-2">
                 <i data-lucide="info" class="w-4 h-4 text-slate-400"></i>
-                <span>Supports <code class="bg-slate-100 px-1.5 py-0.5 rounded-full">[1]</code>, <code class="bg-slate-100 px-1.5 py-0.5 rounded-full">(Smith, 2021)</code>, inline DOIs, &amp; uncited factual prose.</span>
+                <span>Requires citations/references: <code class="bg-slate-100 px-1.5 py-0.5 rounded-full">[1]</code> + References list, <code class="bg-slate-100 px-1.5 py-0.5 rounded-full">(Smith, 2021)</code>, or inline DOIs.</span>
               </div>
               <button id="verifyBtn" onclick="runVerification()" class="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-[#0F172A] hover:bg-slate-800 text-white text-sm font-bold shadow-md transition cv-backlight">
                 <i data-lucide="scan-search" class="w-4 h-4" style="color: #d1b47b;"></i>
@@ -870,15 +878,15 @@
         <div class="rounded-2xl border p-4 bg-slate-50/70">
           <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Our Mission</h4>
           <p class="text-xs leading-relaxed text-slate-700">
-            CiteVerify helps students, researchers, and reviewers detect AI-fabricated references, numerical misquoting, and retracted citations. By combining client-side manuscript parsing with live REST queries to <strong>Crossref</strong> and <strong>OpenAlex</strong>, users can inspect source-linked evidence before grading or publishing—even when analyzing plain, uncited text.
+            CiteVerify helps students, researchers, and reviewers detect AI-fabricated references, numerical misquoting, and retracted citations. By combining client-side manuscript parsing with live REST queries to <strong>Crossref</strong>, <strong>OpenAlex</strong>, and <strong>DataCite</strong>, users can inspect source-linked evidence before grading or publishing.
           </p>
         </div>
         <div>
           <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 mb-3">How to Use CiteVerify (5-Step Workflow)</h4>
           <div class="grid grid-cols-1 sm:grid-cols-5 gap-2.5">
-            <div class="rounded-2xl border p-3 bg-white text-center"><span class="w-6 h-6 rounded-full inline-flex items-center justify-center text-[11px] font-bold mb-1.5" style="background-color: var(--brand-primary); color: #fff;">1</span><p class="text-xs font-bold text-slate-900">Upload</p><p class="text-[11px] text-slate-500 mt-0.5">Drop a .PDF/.TXT or paste text with or without citations.</p></div>
-            <div class="rounded-2xl border p-3 bg-white text-center"><span class="w-6 h-6 rounded-full inline-flex items-center justify-center text-[11px] font-bold mb-1.5" style="background-color: var(--brand-primary); color: #fff;">2</span><p class="text-xs font-bold text-slate-900">Extract</p><p class="text-[11px] text-slate-500 mt-0.5">Detects [1], (Author, Year), DOIs, or top factual claims.</p></div>
-            <div class="rounded-2xl border p-3 bg-white text-center"><span class="w-6 h-6 rounded-full inline-flex items-center justify-center text-[11px] font-bold mb-1.5" style="background-color: var(--brand-primary); color: #fff;">3</span><p class="text-xs font-bold text-slate-900">Retrieve</p><p class="text-[11px] text-slate-500 mt-0.5">Crossref &amp; OpenAlex verify DOIs, abstracts &amp; retractions.</p></div>
+            <div class="rounded-2xl border p-3 bg-white text-center"><span class="w-6 h-6 rounded-full inline-flex items-center justify-center text-[11px] font-bold mb-1.5" style="background-color: var(--brand-primary); color: #fff;">1</span><p class="text-xs font-bold text-slate-900">Upload</p><p class="text-[11px] text-slate-500 mt-0.5">Drop a .PDF/.TXT or paste cited text with references.</p></div>
+            <div class="rounded-2xl border p-3 bg-white text-center"><span class="w-6 h-6 rounded-full inline-flex items-center justify-center text-[11px] font-bold mb-1.5" style="background-color: var(--brand-primary); color: #fff;">2</span><p class="text-xs font-bold text-slate-900">Extract</p><p class="text-[11px] text-slate-500 mt-0.5">Detects [1], (Author, Year), and inline DOI citations.</p></div>
+            <div class="rounded-2xl border p-3 bg-white text-center"><span class="w-6 h-6 rounded-full inline-flex items-center justify-center text-[11px] font-bold mb-1.5" style="background-color: var(--brand-primary); color: #fff;">3</span><p class="text-xs font-bold text-slate-900">Retrieve</p><p class="text-[11px] text-slate-500 mt-0.5">Crossref, OpenAlex &amp; DataCite verify DOIs &amp; abstracts.</p></div>
             <div class="rounded-2xl border p-3 bg-white text-center"><span class="w-6 h-6 rounded-full inline-flex items-center justify-center text-[11px] font-bold mb-1.5" style="background-color: var(--brand-primary); color: #fff;">4</span><p class="text-xs font-bold text-slate-900">Compare</p><p class="text-[11px] text-slate-500 mt-0.5">Numbers, scope, and directional cues are audited.</p></div>
             <div class="rounded-2xl border p-3 bg-white text-center"><span class="w-6 h-6 rounded-full inline-flex items-center justify-center text-[11px] font-bold mb-1.5" style="background-color: var(--brand-accent); color: var(--brand-accent-text);">5</span><p class="text-xs font-bold text-slate-900">Review &amp; Export</p><p class="text-[11px] text-slate-500 mt-0.5">Confirm/override flags, add notes &amp; print PDF report.</p></div>
           </div>
@@ -1047,7 +1055,8 @@
     function sanitizeURL(rawUrl) {
       if (!rawUrl || typeof rawUrl !== 'string') return 'https://search.crossref.org/';
       try {
-        const parsed = new URL(rawUrl.trim(), window.location.origin);
+        const cleaned = rawUrl.trim().replace(/[\\.,;)\]]+$/, '');
+        const parsed = new URL(cleaned, window.location.origin);
         if (parsed.protocol === 'https:' || parsed.protocol === 'http:') {
           return parsed.href;
         }
@@ -1844,15 +1853,48 @@ References
       for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
         const page = await pdf.getPage(pageNum);
         const content = await page.getTextContent();
-        fullText += content.items.map(item => item.str || '').join(' ') + '\n\n';
+        let pageText = '';
+        let lastY = null;
+        for (const item of content.items) {
+          const str = item.str || '';
+          const y = Array.isArray(item.transform) ? item.transform[5] : null;
+          if (lastY !== null && y !== null && Math.abs(y - lastY) > 5) {
+            pageText += '\n';
+          } else if (pageText && !pageText.endsWith('\n') && !pageText.endsWith(' ') && str && !str.startsWith(' ')) {
+            pageText += ' ';
+          }
+          pageText += str;
+          if (item.hasEOL) pageText += '\n';
+          if (y !== null) lastY = y;
+        }
+        fullText += pageText.trim() + '\n\n';
         if (fullText.length > MAX_CHAR_LENGTH + 5000) break;
       }
       return fullText.trim();
     }
 
+    function showReferenceWarning(title, message) {
+      const banner = document.getElementById('referenceWarningBanner');
+      const titleEl = document.getElementById('referenceWarningTitle');
+      const msgEl = document.getElementById('referenceWarningMsg');
+      if (titleEl) titleEl.textContent = title;
+      if (msgEl) msgEl.textContent = message;
+      if (banner) {
+        banner.classList.remove('hidden');
+        banner.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });
+        lucide.createIcons({ nodes: [banner] });
+      }
+    }
+
+    function hideReferenceWarning() {
+      const banner = document.getElementById('referenceWarningBanner');
+      if (banner) banner.classList.add('hidden');
+    }
+
     function clearInput() {
       manuscriptText.value = '';
       appState.docTitle = 'Uploaded Manuscript';
+      hideReferenceWarning();
       fileStatusText.textContent = 'Client-side parsing via PDF.js (max 5 MB) — your document stays in your browser except for reference queries.';
     }
 
@@ -1865,6 +1907,7 @@ References
     }
 
     function loadDemo(demoNumber) {
+      hideReferenceWarning();
       const demo = demoNumber === 1 ? DEMO_1_DATA : DEMO_2_DATA;
       appState.mode = demoNumber === 1 ? 'demo1' : 'demo2';
       appState.docTitle = demo.title;
@@ -1885,7 +1928,7 @@ References
     }
 
     // =========================================================================
-    // SECTION 6: CITATION PARSER & UNCITED CLAIM FALLBACK
+    // SECTION 6: CITATION & REFERENCE PARSER
     // =========================================================================
     const STOP_WORDS = new Set([
       'a','an','the','and','or','but','if','then','else','when','at','by','for','from','in','into','of','on','onto','to','with','without','as','is','are','was','were','be','been','being','have','has','had','do','does','did','will','would','should','can','could','may','might','must','shall','that','this','these','those','it','its','they','their','them','we','our','you','your','he','she','his','her','which','who','whom','what','where','why','how','all','any','both','each','few','more','most','other','some','such','no','nor','not','only','own','same','so','than','too','very','also','about','above','after','again','against','among','around','because','before','below','between','during','however','therefore','thus','hence','furthermore','moreover','additionally','specifically','according','study','studies','research','paper','report','article','authors','findings','results','evidence','data','show','shows','showed','shown','found','suggest','suggests','indicated','indicates','indicate','demonstrate','demonstrates','demonstrated','et','al'
@@ -1893,7 +1936,7 @@ References
 
     function parseDocumentAndReferences(fullText) {
       const normalized = fullText.replace(/\r\n/g, '\n');
-      const refHeaderRegex = /\n\s*(?:#{1,4}\s*)?(?:References|Bibliography|Works Cited|Literature Cited|Cited Literature|Reference List|Sources)\s*:?\s*\n/i;
+      const refHeaderRegex = /(?:\n\s*|\s{2,}|(?<=[.!?])\s+)(?:#{1,4}\s*)?(?:References|Bibliography|Works Cited|Literature Cited|Cited Literature|Reference List|Sources)\s*:?\s*(?=\n|\s*\[\d+\]|\s*1[.)]\s)/i;
       const match = normalized.match(refHeaderRegex);
       let bodyText = normalized;
       let refText = '';
@@ -1912,8 +1955,8 @@ References
           else break;
         }
         if (refStartLine === -1) {
-          const bracketIdx = normalized.search(/\n\s*\[1\]\s+.+(?:19\d{2}|20[0-2]\d|10\.\d{4,9}\/)/);
-          if (bracketIdx !== -1 && bracketIdx > normalized.length * 0.35) {
+          const bracketIdx = normalized.search(/(?:\n|\s{2,})\s*\[1\]\s+.+(?:19\d{2}|20[0-2]\d|10\.\d{4,9}\/)/);
+          if (bracketIdx !== -1 && bracketIdx > normalized.length * 0.30) {
             bodyText = normalized.slice(0, bracketIdx).trim();
             refText = normalized.slice(bracketIdx).trim();
           }
@@ -1925,7 +1968,9 @@ References
 
       const references = [];
       if (refText) {
-        const lines = refText.split(/\n+/).map(l => l.trim()).filter(Boolean);
+        // Handle flattened/single-line reference blocks (common in PDF copy-paste)
+        const expandedRefText = refText.replace(/\s+(?=\[\d+\]\s)/g, '\n');
+        const lines = expandedRefText.split(/\n+/).map(l => l.trim()).filter(Boolean);
         let currentRef = '';
         for (const line of lines) {
           if (/^(\[\d+\]|\d+[.)]|[-•*])\s+/.test(line) && currentRef) {
@@ -1944,15 +1989,15 @@ References
       const numMatch = rawRef.match(/^\[(\d+)\]|^(\d+)[.)]/);
       const id = numMatch ? (numMatch[1] || numMatch[2]) : null;
       const doiMatch = rawRef.match(/10\.\d{4,9}\/[-._;()/:A-Za-z0-9]+/);
-      const urlMatch = rawRef.match(/https?:\/\/[^\s)>\]]+/i);
+      const urlMatch = rawRef.match(/https?:\/\/[^\s)>\]\\]+/i);
       const yearMatch = rawRef.match(/\b(19\d{2}|20[0-2]\d)\b/);
       const cleanText = rawRef.replace(/^(\[\d+\]|\d+[.)]|[-•*])\s*/, '').trim();
       const firstAuthorMatch = cleanText.match(/^([A-Z][a-zA-ZÀ-ÿ'-]+)/);
       return {
         id,
         raw: cleanText,
-        doi: doiMatch ? doiMatch[0].replace(/[.,;)\]]+$/, '') : null,
-        url: urlMatch ? urlMatch[0].replace(/[.,;)\]]+$/, '') : null,
+        doi: doiMatch ? doiMatch[0].replace(/[.,;)\]\\]+$/, '') : null,
+        url: urlMatch ? urlMatch[0].replace(/[.,;)\]\\]+$/, '') : null,
         year: yearMatch ? parseInt(yearMatch[1], 10) : null,
         firstAuthor: firstAuthorMatch ? firstAuthorMatch[1] : null
       };
@@ -1990,15 +2035,15 @@ References
         seenSentences.add(sentence);
         let marker = '';
         let matchedRef = null;
-        const inlineDoi = doiMatch ? doiMatch[1].replace(/[.,;)\]]+$/, '') : null;
-        const inlineUrl = urlMatch ? urlMatch[1].replace(/[.,;)\]]+$/, '') : null;
+        const inlineDoi = doiMatch ? doiMatch[1].replace(/[.,;)\]\\]+$/, '') : null;
+        const inlineUrl = urlMatch ? urlMatch[1].replace(/[.,;)\]\\]+$/, '') : null;
         let attributionQuery = '';
 
         if (bracketMatch) {
           marker = bracketMatch[0];
           const firstNum = bracketMatch[1].match(/\d+/)[0];
           matchedRef = references.find(r => r.id === firstNum) || references[parseInt(firstNum, 10) - 1] || null;
-          if (!matchedRef && !inlineDoi) attributionQuery = buildAcademicSearchQuery(sentence);
+          // Never auto-discover random papers for unmatched [n] citations; keep matchedRef null so it is flagged as missing.
         } else if (inlineDoi) {
           marker = `DOI:${inlineDoi.slice(0, 24)}${inlineDoi.length > 24 ? '…' : ''}`;
           matchedRef = references.find(r => r.doi && r.doi.toLowerCase() === inlineDoi.toLowerCase()) || { id: null, raw: `DOI ${inlineDoi}`, doi: inlineDoi, year: null, firstAuthor: null };
@@ -2007,9 +2052,13 @@ References
           const rawAuthorPart = authorYearMatch[1].trim();
           const surname = rawAuthorPart.split(/[\s,&]+/)[0].toLowerCase();
           const yr = parseInt(authorYearMatch[2], 10);
-          matchedRef = references.find(r => r.raw.toLowerCase().includes(surname) && (!r.year || r.year === yr))
-            || { id: null, raw: `${rawAuthorPart} (${yr}) ${buildAcademicSearchQuery(sentence)}`, doi: null, year: yr, firstAuthor: rawAuthorPart.split(/[\s,&]+/)[0] };
-          attributionQuery = `${rawAuthorPart} ${yr} ${buildAcademicSearchQuery(sentence)}`;
+          const foundRef = references.find(r => r.raw.toLowerCase().includes(surname) && (!r.year || r.year === yr)) || null;
+          if (foundRef) {
+            matchedRef = foundRef;
+          } else {
+            matchedRef = { id: null, raw: `${rawAuthorPart} (${yr}) ${buildAcademicSearchQuery(sentence)}`, doi: null, year: yr, firstAuthor: rawAuthorPart.split(/[\s,&]+/)[0] };
+            attributionQuery = `${rawAuthorPart} ${yr} ${buildAcademicSearchQuery(sentence)}`;
+          }
         } else if (naturalMatch) {
           const phrase = naturalMatch[0].trim();
           marker = phrase.length > 34 ? phrase.slice(0, 32) + '…' : phrase;
@@ -2017,8 +2066,10 @@ References
           const yr = yrMatch ? parseInt(yrMatch[1], 10) : null;
           const phraseWords = buildAcademicSearchQuery(naturalMatch[1] || phrase).toLowerCase().split(/\s+/).filter(w => w.length > 3);
           matchedRef = references.find(r => phraseWords.some(w => r.raw.toLowerCase().includes(w)) && (!yr || r.year === yr)) || null;
-          attributionQuery = buildAcademicSearchQuery(sentence);
-          if (!matchedRef) matchedRef = { id: null, raw: attributionQuery, doi: null, year: yr, firstAuthor: null };
+          if (!matchedRef) {
+            attributionQuery = buildAcademicSearchQuery(sentence);
+            matchedRef = { id: null, raw: attributionQuery, doi: null, year: yr, firstAuthor: null };
+          }
         } else if (inlineUrl) {
           marker = '[Inline URL]';
           attributionQuery = buildAcademicSearchQuery(sentence);
@@ -2028,38 +2079,6 @@ References
         claims.push({ marker, claimText: sentence, matchedRef, inlineDoi, inlineUrl, attributionQuery, isAutoDiscovered: false });
       }
       return claims.slice(0, 20);
-    }
-
-    function extractFactualClaimsFallback(bodyText) {
-      let sentences = splitIntoSentences(bodyText);
-      if (sentences.length === 0) {
-        const cleaned = bodyText.replace(/\s+/g, ' ').trim();
-        if (cleaned) sentences = [cleaned];
-      }
-      const researchVerbRegex = /\b(improves?|reduces?|causes?|increases?|decreases?|shows?|showed|shown|found|effective|linked|associated|correlates?|prevents?|enhances?|lowers?|raises?|proves?|proved|suggests?|indicates?|reveals?|confirms?|outperforms?|significant|accelerates?|declines?|doubles?|halves?)\b/gi;
-      const scored = sentences.map((sentence, originalOrder) => {
-        let score = 0;
-        if (/\b\d+(?:\.\d+)?%/.test(sentence)) score += 5;
-        if (/\b\d+(?:,\d{3})*(?:\.\d+)?\b/.test(sentence)) score += 2.5;
-        if (/\b(19\d{2}|20[0-2]\d)\b/.test(sentence)) score += 2.5;
-        const verbMatches = sentence.match(researchVerbRegex);
-        if (verbMatches) score += Math.min(verbMatches.length * 2, 6);
-        if (sentence.length >= 40 && sentence.length <= 320) score += 1.5;
-        if (sentence.endsWith('?')) score -= 2;
-        return { sentence, originalOrder, score };
-      });
-      scored.sort((a, b) => b.score - a.score || a.originalOrder - b.originalOrder);
-      const targetCount = Math.min(Math.max(scored.length >= 3 ? 5 : scored.length, 1), 6);
-      const selected = scored.slice(0, targetCount).sort((a, b) => a.originalOrder - b.originalOrder);
-      return selected.map(item => ({
-        marker: '[Auto-Source]',
-        claimText: item.sentence,
-        matchedRef: null,
-        inlineDoi: null,
-        inlineUrl: null,
-        attributionQuery: buildAcademicSearchQuery(item.sentence),
-        isAutoDiscovered: true
-      }));
     }
 
     function buildAcademicSearchQuery(sentence) {
@@ -2106,8 +2125,28 @@ References
       if (text === DEMO_1_DATA.text.trim()) { loadDemo(1); return; }
       if (text === DEMO_2_DATA.text.trim()) { loadDemo(2); return; }
 
+      hideReferenceWarning();
+      const { bodyText, references } = parseDocumentAndReferences(text);
+      const extractedClaims = extractClaimsWithCitations(bodyText, references);
+
+      if (extractedClaims.length === 0) {
+        const msg = 'No citations or references were detected in this text. Please attach at least one reference — such as [1] with a References list, an Author-Year citation like (Smith et al., 2021), or an inline DOI (e.g., 10.1038/...) — and try again.';
+        showReferenceWarning('Please Attach a Reference to Verify', msg);
+        showToast('Reference Required', 'Please attach at least one citation or reference to audit.', 'alert-triangle');
+        return;
+      }
+
+      const allUnmatchedBrackets = references.length === 0 && extractedClaims.every(c => /^\[\d+/.test(c.marker) && !c.matchedRef && !c.inlineDoi);
+      if (allUnmatchedBrackets) {
+        const msg = 'Inline citation markers (such as [1]) were found, but no References section was detected. Please paste your References list at the bottom of the document (e.g., "References:" followed by [1] ...) and try again.';
+        showReferenceWarning('Missing References Section', msg);
+        showToast('References List Missing', 'Attach the References section for your [1] citations.', 'alert-triangle');
+        return;
+      }
+
       appState.mode = 'live';
       appState.rawText = text;
+      appState.references = references;
       appState.reviewHistory = [];
       lastAnimatedTrustScore = 0;
       shouldStaggerNextRender = true;
@@ -2116,44 +2155,16 @@ References
       document.getElementById('inputSection').classList.add('hidden');
       document.getElementById('workspaceSection').classList.add('hidden');
       document.getElementById('loadingSection').classList.remove('hidden');
-      updateProgress(8, 'Receiving uploaded manuscript...');
+      updateProgress(15, 'Parsing citations and bibliography entries...');
 
       try {
         await new Promise(r => setTimeout(r, 120));
-        updateProgress(15, 'Parsing citations, bibliography & factual claims...');
-        const { bodyText, references } = parseDocumentAndReferences(text);
-        appState.references = references;
-
-        let extractedClaims = extractClaimsWithCitations(bodyText, references);
-        let usedUncitedFallback = false;
-
-        if (extractedClaims.length === 0) {
-          usedUncitedFallback = true;
-          updateProgress(20, 'No formal citations detected — extracting top factual claims for auto-discovery...');
-          extractedClaims = extractFactualClaimsFallback(bodyText);
-        }
-
-        if (extractedClaims.length === 0) {
-          const fallbackSentence = bodyText.replace(/\s+/g, ' ').trim().slice(0, 320);
-          extractedClaims = [{
-            marker: '[Auto-Source]',
-            claimText: fallbackSentence,
-            matchedRef: null,
-            inlineDoi: null,
-            inlineUrl: null,
-            attributionQuery: buildAcademicSearchQuery(fallbackSentence),
-            isAutoDiscovered: true
-          }];
-        }
 
         const verifiedClaims = [];
         for (let i = 0; i < extractedClaims.length; i++) {
           const item = extractedClaims[i];
           const pct = Math.round(25 + ((i + 1) / extractedClaims.length) * 68);
-          updateProgress(pct, item.isAutoDiscovered
-            ? `Auto-discovering source ${i + 1} of ${extractedClaims.length} via OpenAlex & Crossref...`
-            : `Retrieving & comparing claim ${i + 1} of ${extractedClaims.length} (${item.marker})...`
-          );
+          updateProgress(pct, `Retrieving & comparing claim ${i + 1} of ${extractedClaims.length} (${item.marker})...`);
           try {
             const verified = await verifySingleClaimLive(item, i);
             verifiedClaims.push(verified);
@@ -2171,11 +2182,9 @@ References
         renderWorkspace();
 
         showToast(
-          usedUncitedFallback ? 'Auto-Discovery Complete' : 'Verification Complete',
-          usedUncitedFallback
-            ? `No formal citations found — audited ${verifiedClaims.length} factual claims against live literature.`
-            : `${verifiedClaims.length} claims audited via Crossref & OpenAlex.`,
-          usedUncitedFallback ? 'search-check' : 'shield-check'
+          'Verification Complete',
+          `${verifiedClaims.length} cited claims audited via Crossref, OpenAlex & DataCite.`,
+          'shield-check'
         );
       } catch (err) {
         console.warn('Verification pipeline error:', err);
@@ -2335,31 +2344,20 @@ References
         };
       }
 
-      if (doiNotFound || (!crWork && !oaWork) || (!explicitDoi && !isAutoDiscovered && titleOverlap < 0.18 && combinedOverlap < 0.18)) {
-        return {
-          id, index: idx, marker: item.marker, claimText: item.claimText,
-          citationText: isAutoDiscovered ? 'Auto-Discovered Source (No Citation Provided): No closely matching peer-reviewed paper located' : ((ref && ref.raw) || item.marker),
-          authors: (ref && ref.firstAuthor) || 'Unverified', year: (ref && ref.year) || null,
-          verdict: 'Unsupported', confidence: doiNotFound ? 94 : (isAutoDiscovered ? 72 : 82),
-          limitationNote: doiNotFound
-            ? `Explicit DOI (${explicitDoi}) returned HTTP 404 from Crossref.`
-            : (isAutoDiscovered ? 'Uncited claim; automated OpenAlex & Crossref query found no sufficiently matching peer-reviewed paper.' : 'Low bibliographic match score across Crossref & OpenAlex indexes; possible hallucinated or misattributed citation.'),
-          explanation: doiNotFound
-            ? `The cited DOI (${explicitDoi}) does not resolve to any registered scholarly work in Crossref. This strongly indicates a fabricated or corrupted citation.`
-            : (isAutoDiscovered ? 'No formal citation was provided in the text, and automated searches across OpenAlex and Crossref returned no closely matching empirical study for this claim.' : 'No matching publication was found in Crossref or OpenAlex for this citation string.'),
-          evidenceHtml: `<span class="text-rose-700 font-medium">[No Verified Match Found]</span> Crossref &amp; OpenAlex returned no matching record for <em>${escapeHTML(searchQuery.slice(0, 140))}</em>.`,
-          sourceUrl: sanitizeURL(explicitDoi ? `https://doi.org/${explicitDoi}` : `https://api.openalex.org/works?search=${encodeURIComponent(searchQuery.slice(0, 120))}`),
-          isRetracted: false, isAutoDiscovered, humanStatus: null, reviewerNote: ''
-        };
-      }
-
       const finalTitle = retrievedTitle || (ref && ref.raw) || 'Untitled Scholarly Work';
       const pubYear = (oaWork && oaWork.publication_year)
         || (crWork && crWork.published && crWork.published['date-parts'] && crWork.published['date-parts'][0] && crWork.published['date-parts'][0][0])
         || (crWork && crWork.issued && crWork.issued['date-parts'] && crWork.issued['date-parts'][0] && crWork.issued['date-parts'][0][0])
         || (ref && ref.year) || null;
-      const isRetracted = Boolean(oaWork && oaWork.is_retracted);
-      const crDoi = (crWork && crWork.DOI) || (oaWork && oaWork.doi ? String(oaWork.doi).replace('https://doi.org/', '') : null) || explicitDoi;
+      const crRetracted = Boolean(
+        crWork && (
+          crWork.type === 'retraction' ||
+          (Array.isArray(crWork['update-to']) && crWork['update-to'].some(u => /retract/i.test(String(u.type || u.label || '')))) ||
+          (crWork.relation && crWork.relation['is-retracted-by'])
+        )
+      );
+      const isRetracted = Boolean((oaWork && oaWork.is_retracted) || crRetracted || /\bRETRACTED\b/i.test(finalTitle));
+      const crDoi = (crWork && crWork.DOI) || (oaWork && oaWork.doi ? String(oaWork.doi).replace(/^https?:\/\/(dx\.)?doi\.org\//i, '') : null) || explicitDoi;
       const rawSourceUrl = crDoi ? `https://doi.org/${crDoi}` : (oaWork && oaWork.id) || `https://search.crossref.org/?q=${encodeURIComponent(finalTitle)}`;
       const sourceUrl = sanitizeURL(rawSourceUrl);
 
@@ -2374,12 +2372,19 @@ References
 
       const currentYear = new Date().getFullYear();
       const age = pubYear ? currentYear - pubYear : 0;
-      const claimNumbers = (item.claimText.match(/\b\d+(?:\.\d+)?%|\b\d{2,}\b/g) || []).filter(n => !/^(19|20)\d{2}$/.test(n));
-      const missingNumbers = abstractText ? claimNumbers.filter(num => !abstractText.includes(num.replace('%', ''))) : [];
+      const claimNumbers = (item.claimText.match(/\b\d{1,3}(?:,\d{3})+(?:\.\d+)?%?|\b\d+(?:\.\d+)?%|\b\d{2,}\b/g) || [])
+        .filter(n => !/^(19|20)\d{2}$/.test(n));
+      const normalizedAbstractNums = abstractText ? abstractText.replace(/,/g, '') : '';
+      const missingNumbers = abstractText
+        ? claimNumbers.filter(num => !normalizedAbstractNums.includes(num.replace(/[,%]/g, '')))
+        : [];
 
-      const positiveCues = /\b(improves?|enhances?|increases?|eliminates?|doubles?|effective|significant(?:ly)?\s+(?:higher|better|greater|gain)|benefits?|boosts?|promotes?)\b/i;
-      const negativeCues = /\b(no\s+significant\s+(?:effect|difference|benefit|impact)|fails?\s+to|failed\s+to|contradicts?|contrary|harms?|worse|decreases?|declines?|ineffective|undermines?|does\s+not\s+(?:improve|increase|reduce))\b/i;
-      const hasPolarityConflict = abstractText && ((positiveCues.test(item.claimText) && !negativeCues.test(item.claimText) && negativeCues.test(abstractText)) || (negativeCues.test(item.claimText) && positiveCues.test(abstractText) && !negativeCues.test(abstractText)));
+      const positiveCues = /\b(proved|proves?|cures?|cured|improves?|improved|enhances?|enhanced|increases?|increased|eliminates?|eliminated|doubles?|doubled|effective|benefits?|boosts?|promotes?|prevents?|protects?|reverses?|reversed|(?:dramatically|significantly|substantially|markedly|strongly)\s+(?:reduces?|reduced|lowers?|lowered|higher|better|greater|improves?|improved)|reduces?\s+(?:overall\s+)?(?:hospital\s+)?(?:mortality|deaths?|risk|symptoms|depression)|reduced\s+(?:overall\s+)?(?:hospital\s+)?(?:mortality|deaths?|risk|symptoms|depression))\b/i;
+      const negativeCues = /\b(little\s+or\s+no\s+(?:effect|benefit|impact|difference)|no\s+(?:significant|meaningful|overall|statistically\s+significant|clear|clinical)?\s*(?:effect|difference|benefit|impact|reduction|improvement|evidence)|did\s+not\s+(?:significantly\s+)?(?:reduce|improve|increase|prevent|lower|affect|cure|alter)|does\s+not\s+(?:significantly\s+)?(?:reduce|improve|increase|prevent|lower|affect|cure|alter)|fails?\s+to|failed\s+to|contradicts?|contrary\s+to|harms?|harmed|worse\s+(?:outcomes?|performance|scores?)|ineffective|undermines?|insufficiently\s+robust|no\s+mortality\s+benefit|without\s+benefit)\b/i;
+      const hasPolarityConflict = abstractText && (
+        (positiveCues.test(item.claimText) && !negativeCues.test(item.claimText) && negativeCues.test(abstractText)) ||
+        (negativeCues.test(item.claimText) && positiveCues.test(abstractText) && !negativeCues.test(abstractText))
+      );
 
       let verdict = 'Supported';
       let confidence = 84;
@@ -2395,8 +2400,8 @@ References
         explanation = `The matched work was published in ${pubYear} (${age} years ago). Findings older than 10 years may be superseded by newer studies or contemporary benchmarks.`;
         limitationNote = (isAutoDiscovered ? 'Auto-discovered source (no citation provided); ' : '') + (abstractText ? 'publication age (>10 years) triggers currency warning.' : 'publication age >10 years and abstract unavailable via open APIs.');
       } else if (hasPolarityConflict) {
-        verdict = 'Contradictory'; confidence = isAutoDiscovered ? 65 : 74;
-        explanation = 'Directional polarity mismatch detected: the claim asserts a positive or significant outcome, whereas the retrieved paper abstract contains opposing or null-effect language (e.g., "no significant effect", "fails to", "decreases").';
+        verdict = 'Contradictory'; confidence = isAutoDiscovered ? 65 : 78;
+        explanation = 'Directional polarity mismatch detected: the claim asserts a strong efficacy or positive outcome, whereas the retrieved paper abstract reports opposing, cautionary, or null-effect findings (e.g., "little or no effect", "did not reduce", "no significant benefit", or "harms").';
         limitationNote = (isAutoDiscovered ? 'Auto-discovered source (no citation provided); ' : '') + 'automated polarity check on abstract text — human inspection of statistical tables advised.';
       } else if (isAutoDiscovered && combinedOverlap < 0.20) {
         verdict = 'Partly Supported'; confidence = 48;
@@ -2630,7 +2635,7 @@ References
           html += `<h2 ${staggerStyle} class="${staggerClass} font-sans text-lg font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">${escapeHTML(trimmed)}</h2>`;
           return;
         }
-        let paraHtml = escapeHTML(trimmed);
+        let paraHtml = escapeHTML(trimmed.replace(/\s*\n\s*/g, ' '));
         appState.claims.forEach((claim, cIdx) => {
           const escapedClaim = escapeHTML(claim.claimText);
           if (paraHtml.includes(escapedClaim)) {
@@ -2728,7 +2733,7 @@ References
 
         <div class="rounded-2xl border border-slate-200 p-4 bg-white cv-hover-card">
           <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-500"><i data-lucide="gauge" class="w-3.5 h-3.5"></i><span>5. Calibrated Confidence &amp; Uncertainty</span></div>
+            <div class="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-500"><i data-lucide="gauge" class="w-3.5 h-3.5"></i><span>4. Calibrated Confidence &amp; Uncertainty</span></div>
             <span class="text-sm font-bold text-slate-900">${Number(claim.confidence) || 0}% Confidence</span>
           </div>
           <div class="w-full bg-slate-100 rounded-full h-2 mb-2.5 overflow-hidden">
@@ -2742,7 +2747,7 @@ References
 
         <div class="rounded-2xl border border-slate-200 p-4 bg-white cv-hover-card flex flex-wrap items-center justify-between gap-3">
           <div class="min-w-0 flex-1">
-            <div class="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-0.5"><i data-lucide="link" class="w-3.5 h-3.5"></i><span>6. Source Trace</span></div>
+            <div class="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-0.5"><i data-lucide="link" class="w-3.5 h-3.5"></i><span>5. Source Trace</span></div>
             <p class="text-xs text-slate-600 break-all font-mono">${escapeHTML(safeSourceUrl)}</p>
           </div>
           <a href="${escapeHTML(safeSourceUrl)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shrink-0 cv-backlight">
