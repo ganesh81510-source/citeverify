@@ -321,6 +321,65 @@
       .cv-toast.is-leaving { animation: cvToastOut 0.24s var(--ease-executive) forwards; }
       @keyframes cvToastIn { 0% { opacity: 0; transform: translateY(12px) scale(0.96); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
       @keyframes cvToastOut { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(8px) scale(0.96); } }
+      header p.text-slate-400 { color: var(--text-header-muted) !important; }
+
+      /* Cinematic Welcome Splash Overlay */
+      #welcomeSplash {
+        background: radial-gradient(70% 60% at 50% 42%, rgba(18, 98, 108, 0.96) 0%, rgba(8, 34, 38, 0.98) 58%, rgba(5, 20, 23, 0.99) 100%);
+        backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+        opacity: 1; transition: opacity 0.45s var(--ease-executive), transform 0.45s var(--ease-executive);
+      }
+      #welcomeSplash.is-exiting {
+        opacity: 0; transform: scale(1.04); pointer-events: none;
+      }
+      .cv-welcome-aura {
+        animation: cvWelcomeAura 1.8s var(--ease-executive) forwards;
+      }
+      @keyframes cvWelcomeAura {
+        0% { transform: scale(0.5); opacity: 0; }
+        45% { transform: scale(1.08); opacity: 0.95; }
+        100% { transform: scale(1.22); opacity: 0.7; }
+      }
+      .cv-welcome-ring {
+        animation: cvWelcomeRing 1.5s var(--ease-executive) forwards;
+      }
+      .cv-welcome-ring-delay {
+        animation: cvWelcomeRing 1.5s var(--ease-executive) 0.22s forwards;
+      }
+      @keyframes cvWelcomeRing {
+        0% { transform: scale(0.55); opacity: 0.9; }
+        100% { transform: scale(2.15); opacity: 0; }
+      }
+      .cv-welcome-badge {
+        opacity: 0;
+        animation: cvWelcomeBadgePop 0.65s cubic-bezier(0.22, 1.25, 0.36, 1) 0.08s forwards;
+      }
+      @keyframes cvWelcomeBadgePop {
+        0% { opacity: 0; transform: scale(0.45) rotate(-10deg); }
+        100% { opacity: 1; transform: scale(1) rotate(0deg); }
+      }
+      .cv-welcome-rise-1 { opacity: 0; animation: cvWelcomeRise 0.55s var(--ease-executive) 0.26s forwards; }
+      .cv-welcome-rise-2 { opacity: 0; animation: cvWelcomeRise 0.6s var(--ease-executive) 0.40s forwards; }
+      .cv-welcome-rise-3 { opacity: 0; animation: cvWelcomeRise 0.55s var(--ease-executive) 0.54s forwards; }
+      @keyframes cvWelcomeRise {
+        0% { opacity: 0; transform: translateY(18px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+      .cv-welcome-bar-fill {
+        transform-origin: left center; transform: scaleX(0);
+        animation: cvWelcomeProgress 1.65s var(--ease-executive) 0.2s forwards;
+      }
+      @keyframes cvWelcomeProgress {
+        0% { transform: scaleX(0); }
+        100% { transform: scaleX(1); }
+      }
+      .cv-workspace-reveal {
+        animation: cvWorkspaceReveal 0.5s var(--ease-executive) forwards;
+      }
+      @keyframes cvWorkspaceReveal {
+        0% { opacity: 0.35; transform: scale(0.99); }
+        100% { opacity: 1; transform: scale(1); }
+      }
     }
     .claim-highlight { transition: background-color 0.2s var(--ease-executive), box-shadow 0.2s var(--ease-executive), filter 0.16s var(--ease-executive); cursor: pointer; border-radius: 3px; padding: 1px 2px; }
     .claim-highlight:hover { filter: brightness(0.96); }
@@ -338,7 +397,7 @@
     @media print {
       @page { margin: 0.6in; size: letter; }
       body { background: #FFFFFF !important; color: #0F172A !important; }
-      #authGate, #mainAppShell, .no-print { display: none !important; }
+      #authGate, #mainAppShell, #welcomeSplash, .no-print { display: none !important; }
       #printReportSection, .print-only { display: block !important; }
       .print-break-inside-avoid { break-inside: avoid; page-break-inside: avoid; }
     }
@@ -992,6 +1051,34 @@
     </div>
   </div>
 
+  <!-- CINEMATIC WELCOME SPLASH (PLAYS ON LOGIN / SIGN UP) -->
+  <div id="welcomeSplash" onclick="dismissWelcomeAnimation()" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6 no-print cursor-pointer select-none overflow-hidden" role="status" aria-live="polite">
+    <div class="cv-welcome-aura absolute w-[520px] h-[520px] rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(209,180,123,0.28) 0%, rgba(18,98,108,0.16) 48%, transparent 72%);"></div>
+    <div class="relative z-10 flex flex-col items-center text-center max-w-lg w-full">
+      <div class="relative flex items-center justify-center mb-7">
+        <span class="cv-welcome-ring absolute w-24 h-24 rounded-full border-2 pointer-events-none" style="border-color: rgba(209, 180, 123, 0.7);"></span>
+        <span class="cv-welcome-ring-delay absolute w-24 h-24 rounded-full border pointer-events-none" style="border-color: rgba(209, 180, 123, 0.45);"></span>
+        <div class="cv-welcome-badge w-24 h-24 rounded-3xl flex items-center justify-center border-2 shadow-2xl" style="background: linear-gradient(145deg, rgba(209,180,123,0.28), rgba(18,98,108,0.55)); border-color: #d1b47b; color: #d1b47b; box-shadow: 0 0 42px rgba(209,180,123,0.38);">
+          <i data-lucide="shield-check" class="w-12 h-12"></i>
+        </div>
+      </div>
+      <div class="cv-welcome-rise-1 inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-[0.2em] border mb-4" style="background-color: rgba(209,180,123,0.14); border-color: rgba(209,180,123,0.5); color: #d1b47b;">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+        <span id="welcomeSplashTag">Authentication Verified</span>
+      </div>
+      <h2 id="welcomeSplashTitle" class="cv-welcome-rise-2 text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+        Welcome back!
+      </h2>
+      <p id="welcomeSplashSub" class="cv-welcome-rise-3 text-sm sm:text-base text-teal-100/85 mt-3 max-w-md">
+        Launching your CiteVerify Scientific Citation Audit Workspace...
+      </p>
+      <div class="cv-welcome-rise-3 w-64 sm:w-72 h-1.5 rounded-full overflow-hidden mt-7" style="background-color: rgba(255,255,255,0.14);">
+        <div id="welcomeSplashBar" class="cv-welcome-bar-fill h-full w-full rounded-full" style="background: linear-gradient(90deg, #197B88, #d1b47b, #F3DFA8);"></div>
+      </div>
+      <p class="cv-welcome-rise-3 text-[11px] text-teal-200/60 mt-4 tracking-wide">Click anywhere to continue immediately</p>
+    </div>
+  </div>
+
   <!-- TOASTS & PRINT REPORT -->
   <div id="toastContainer" class="fixed bottom-5 right-5 z-[70] flex flex-col gap-2 max-w-sm w-full pointer-events-none no-print px-4 sm:px-0"></div>
   <section id="printReportSection" class="hidden print-only max-w-4xl mx-auto"></section>
@@ -1298,8 +1385,7 @@
       failedLoginAttempts = 0;
       errBanner.classList.add('hidden');
       persistSession(userRecord.username, remember);
-      enterWorkspaceApp(userRecord);
-      showToast(`Welcome back, ${userRecord.fullName}`, 'Signed in to CiteVerify.', 'shield-check');
+      enterWorkspaceApp(userRecord, { showWelcome: true, isNewUser: false });
     }
 
     function handleSignupSubmit(event) {
@@ -1351,8 +1437,7 @@
       saveStoredAccounts(accounts);
       errBanner.classList.add('hidden');
       persistSession(newAccount.username, true);
-      enterWorkspaceApp(newAccount);
-      showToast('Account Created!', `Welcome to CiteVerify, ${newAccount.fullName}.`, 'user-check');
+      enterWorkspaceApp(newAccount, { showWelcome: true, isNewUser: true });
     }
 
     function persistSession(username, remember) {
@@ -1363,11 +1448,75 @@
       } catch (e) {}
     }
 
-    function enterWorkspaceApp(account) {
+    let welcomeSplashTimer = null;
+    let welcomeSplashHideTimer = null;
+
+    function playWelcomeAnimation(account, isNewUser = false) {
+      const splash = document.getElementById('welcomeSplash');
+      const shell = document.getElementById('mainAppShell');
+      const displayName = (account && (account.fullName || account.username)) || 'Reviewer';
+
+      if (!splash || prefersReducedMotion()) {
+        showToast(isNewUser ? 'Account Created!' : `Welcome back, ${displayName}`, 'Signed in to CiteVerify.', isNewUser ? 'user-check' : 'shield-check');
+        return;
+      }
+
+      if (welcomeSplashTimer) clearTimeout(welcomeSplashTimer);
+      if (welcomeSplashHideTimer) clearTimeout(welcomeSplashHideTimer);
+
+      const tagEl = document.getElementById('welcomeSplashTag');
+      const titleEl = document.getElementById('welcomeSplashTitle');
+      const subEl = document.getElementById('welcomeSplashSub');
+      if (tagEl) tagEl.textContent = isNewUser ? 'Account Created' : 'Authentication Verified';
+      if (titleEl) titleEl.innerHTML = `${isNewUser ? 'Welcome' : 'Welcome back'}, <span style="color: #d1b47b;">${escapeHTML(displayName)}</span>`;
+      if (subEl) subEl.textContent = isNewUser
+        ? 'Setting up your CiteVerify Scientific Citation Audit Workspace...'
+        : 'Launching your CiteVerify Scientific Citation Audit Workspace...';
+
+      // Reset CSS animations cleanly for repeat logins in the same tab
+      splash.classList.remove('hidden', 'is-exiting');
+      splash.querySelectorAll('.cv-welcome-aura, .cv-welcome-ring, .cv-welcome-ring-delay, .cv-welcome-badge, .cv-welcome-rise-1, .cv-welcome-rise-2, .cv-welcome-rise-3, .cv-welcome-bar-fill').forEach(el => {
+        el.style.animation = 'none';
+        void el.offsetWidth;
+        el.style.animation = '';
+      });
+      lucide.createIcons({ nodes: [splash] });
+
+      welcomeSplashTimer = setTimeout(() => {
+        dismissWelcomeAnimation(displayName, isNewUser);
+      }, 1900);
+    }
+
+    function dismissWelcomeAnimation(displayName, isNewUser) {
+      const splash = document.getElementById('welcomeSplash');
+      const shell = document.getElementById('mainAppShell');
+      if (!splash || splash.classList.contains('hidden')) return;
+      if (welcomeSplashTimer) { clearTimeout(welcomeSplashTimer); welcomeSplashTimer = null; }
+      if (welcomeSplashHideTimer) { clearTimeout(welcomeSplashHideTimer); welcomeSplashHideTimer = null; }
+
+      splash.classList.add('is-exiting');
+      if (shell) {
+        shell.classList.remove('cv-workspace-reveal');
+        void shell.offsetWidth;
+        shell.classList.add('cv-workspace-reveal');
+      }
+      welcomeSplashHideTimer = setTimeout(() => {
+        splash.classList.add('hidden');
+        splash.classList.remove('is-exiting');
+        if (displayName) {
+          showToast(isNewUser ? 'Account Ready!' : `Welcome back, ${displayName}`, 'CiteVerify workspace ready for citation auditing.', isNewUser ? 'user-check' : 'shield-check');
+        }
+      }, 450);
+    }
+
+    function enterWorkspaceApp(account, options = {}) {
       document.getElementById('authGate').classList.add('hidden');
       document.getElementById('mainAppShell').classList.remove('hidden');
       syncAccountToUI(account);
       lucide.createIcons();
+      if (options && options.showWelcome) {
+        playWelcomeAnimation(account, Boolean(options.isNewUser));
+      }
     }
 
     function getInitials(name) {
@@ -1504,6 +1653,7 @@
     // Global Escape Key Handler for Modals & Menus
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
+        dismissWelcomeAnimation();
         ['contactModal', 'aboutModal', 'profileModal', 'deleteConfirmModal', 'historyModal'].forEach(closeModal);
         const menu = document.getElementById('themeMenu');
         const btn = document.getElementById('themeToggleBtn');
@@ -2324,7 +2474,12 @@ References
         } catch (e) {}
       }
 
-      const combinedOverlap = computeTokenOverlap(item.claimText, `${retrievedTitle} ${abstractText}`);
+      const cleanClaimForMetrics = item.claimText
+        .replace(/https?:\/\/\S+/gi, ' ')
+        .replace(/\b(?:doi\s*:\s*)?10\.\d{4,9}\/[-._;()/:A-Za-z0-9]+/gi, ' ')
+        .replace(/\[\d+(?:\s*[-–,]\s*\d+)*\]/g, ' ')
+        .trim();
+      const combinedOverlap = computeTokenOverlap(cleanClaimForMetrics || item.claimText, `${retrievedTitle} ${abstractText}`);
 
       if (doiNotFound || (!crWork && !oaWork) || (!explicitDoi && !isAutoDiscovered && titleOverlap < 0.18 && combinedOverlap < 0.18)) {
         return {
@@ -2372,7 +2527,7 @@ References
 
       const currentYear = new Date().getFullYear();
       const age = pubYear ? currentYear - pubYear : 0;
-      const claimNumbers = (item.claimText.match(/\b\d{1,3}(?:,\d{3})+(?:\.\d+)?%?|\b\d+(?:\.\d+)?%|\b\d{2,}\b/g) || [])
+      const claimNumbers = ((cleanClaimForMetrics || item.claimText).match(/\b\d{1,3}(?:,\d{3})+(?:\.\d+)?%?|\b\d+(?:\.\d+)?%|\b\d{2,}\b/g) || [])
         .filter(n => !/^(19|20)\d{2}$/.test(n));
       const normalizedAbstractNums = abstractText ? abstractText.replace(/,/g, '') : '';
       const missingNumbers = abstractText
@@ -2395,6 +2550,10 @@ References
         verdict = 'Possibly Outdated'; confidence = 93;
         explanation = `OpenAlex metadata indicates this paper (${pubYear || 'unknown year'}) has been formally RETRACTED (is_retracted = true). Claims relying on retracted literature should be flagged immediately.`;
         limitationNote = 'OpenAlex retraction flag triggered; verify retraction notice via publisher DOI.';
+      } else if (abstractText && combinedOverlap < 0.08) {
+        verdict = 'Unsupported'; confidence = 84;
+        explanation = `Misattributed or irrelevant citation: the cited source (${authorsStr}, ${pubYear || 'n.d.'}: "${finalTitle}") exists, but its title and abstract share virtually no topical overlap with this claim.`;
+        limitationNote = 'Cited DOI/reference resolved to a real work, but claim terminology does not appear in the retrieved title or abstract — verify whether the correct reference was attached.';
       } else if (age > 10) {
         verdict = 'Possibly Outdated'; confidence = isAutoDiscovered ? 66 : 76;
         explanation = `The matched work was published in ${pubYear} (${age} years ago). Findings older than 10 years may be superseded by newer studies or contemporary benchmarks.`;
