@@ -2218,20 +2218,58 @@ References
       let oaCandidates = [];
       let doiNotFound = false;
       let anyNetworkError = false;
+      const formatDoiPath = (d) => String(d || '').trim().replace(/^https?:\/\/(dx\.)?doi\.org\//i, '').split('/').map(encodeURIComponent).join('/');
 
       if (explicitDoi) {
-        const [crDoiRes, oaDoiRes] = await Promise.allSettled([
+        const doiPath = formatDoiPath(explicitDoi);
+        let cr404 = false, oa404 = false, dc404 = false;
+
+        const [crDoiRes, oaDoiRes, dcDoiRes] = await Promise.allSettled([
           fetchWithTimeout(`https://api.crossref.org/works/${encodeURIComponent(explicitDoi)}`),
-          fetchWithTimeout(`https://api.openalex.org/works/https://doi.org/${encodeURIComponent(explicitDoi)}`)
+          fetchWithTimeout(`https://api.openalex.org/works/doi:${doiPath}`),
+          fetchWithTimeout(`https://api.datacite.org/dois/${doiPath}`)
         ]);
+
         if (crDoiRes.status === 'fulfilled') {
           if (crDoiRes.value.ok) { const d = await crDoiRes.value.json(); if (d && d.message) crCandidates.push(d.message); }
-          else if (crDoiRes.value.status === 404) doiNotFound = true;
+          else if (crDoiRes.value.status === 404) cr404 = true;
+          else if (crDoiRes.value.status >= 429) anyNetworkError = true;
         } else anyNetworkError = true;
 
         if (oaDoiRes.status === 'fulfilled') {
           if (oaDoiRes.value.ok) { const d = await oaDoiRes.value.json(); if (d && d.id) oaCandidates.push(d); }
+          else if (oaDoiRes.value.status === 404) oa404 = true;
+          else if (oaDoiRes.value.status >= 429) anyNetworkError = true;
         } else anyNetworkError = true;
+
+        if (dcDoiRes.status === 'fulfilled') {
+          if (dcDoiRes.value.ok) {
+            const dcJson = await dcDoiRes.value.json();
+            const attr = dcJson && dcJson.data && dcJson.data.attributes;
+            if (attr) {
+              const dcTitle = Array.isArray(attr.titles) && attr.titles[0] ? attr.titles[0].title : '';
+              const dcDescObj = Array.isArray(attr.descriptions)
+                ? (attr.descriptions.find(x => x && x.descriptionType === 'Abstract') || attr.descriptions[0])
+                : null;
+              crCandidates.push({
+                DOI: attr.doi || explicitDoi,
+                title: dcTitle ? [dcTitle] : [],
+                abstract: dcDescObj && dcDescObj.description ? dcDescObj.description : '',
+                publisher: attr.publisher || 'DataCite',
+                issued: attr.publicationYear ? { 'date-parts': [[Number(attr.publicationYear)]] } : undefined,
+                author: Array.isArray(attr.creators) ? attr.creators.map(c => ({
+                  given: c.givenName || '',
+                  family: c.familyName || c.name || ''
+                })) : []
+              });
+            }
+          } else if (dcDoiRes.value.status === 404) dc404 = true;
+        }
+
+        // Only flag DOI as fabricated when NONE of Crossref, OpenAlex, or DataCite resolved it
+        if (crCandidates.length === 0 && oaCandidates.length === 0 && cr404 && (oa404 || dc404)) {
+          doiNotFound = true;
+        }
       }
 
       if (crCandidates.length === 0 && oaCandidates.length === 0 && !doiNotFound) {
@@ -2264,7 +2302,7 @@ References
       if (!abstractText && crWork && !oaWork) {
         try {
           const lookupUrl = crWork.DOI
-            ? `https://api.openalex.org/works/https://doi.org/${encodeURIComponent(crWork.DOI)}`
+            ? `https://api.openalex.org/works/doi:${formatDoiPath(crWork.DOI)}`
             : (retrievedTitle ? `https://api.openalex.org/works?search=${encodeURIComponent(retrievedTitle)}&per-page=1` : null);
           if (lookupUrl) {
             const extraRes = await fetchWithTimeout(lookupUrl, 5000);
@@ -2278,6 +2316,24 @@ References
       }
 
       const combinedOverlap = computeTokenOverlap(item.claimText, `${retrievedTitle} ${abstractText}`);
+
+      if (doiNotFound || (!crWork && !oaWork) || (!explicitDoi && !isAutoDiscovered && titleOverlap < 0.18 && combinedOverlap < 0.18)) {
+        return {
+          id, index: idx, marker: item.marker, claimText: item.claimText,
+          citationText: isAutoDiscovered ? 'Auto-Discovered Source (No Citation Provided): No closely matching peer-reviewed paper located' : ((ref && ref.raw) || item.marker),
+          authors: (ref && ref.firstAuthor) || 'Unverified', year: (ref && ref.year) || null,
+          verdict: 'Unsupported', confidence: doiNotFound ? 94 : (isAutoDiscovered ? 72 : 82),
+          limitationNote: doiNotFound
+            ? `Explicit DOI (${explicitDoi}) returned HTTP 404 across Crossref, OpenAlex, and DataCite.`
+            : (isAutoDiscovered ? 'Uncited claim; automated OpenAlex & Crossref query found no sufficiently matching peer-reviewed paper.' : 'Low bibliographic match score across Crossref & OpenAlex indexes; possible hallucinated or misattributed citation.'),
+          explanation: doiNotFound
+            ? `The cited DOI (${explicitDoi}) does not resolve to any registered scholarly work in Crossref, OpenAlex, or DataCite. This strongly indicates a fabricated or corrupted citation.`
+            : (isAutoDiscovered ? 'No formal citation was provided in the text, and automated searches across OpenAlex and Crossref returned no closely matching empirical study for this claim.' : 'No matching publication was found in Crossref, OpenAlex, or DataCite for this citation string.'),
+          evidenceHtml: `<span class="text-rose-700 font-medium">[No Verified Match Found]</span> Crossref, OpenAlex &amp; DataCite returned no matching record for <em>${escapeHTML(searchQuery.slice(0, 140))}</em>.`,
+          sourceUrl: sanitizeURL(explicitDoi ? `https://doi.org/${explicitDoi}` : `https://api.openalex.org/works?search=${encodeURIComponent(searchQuery.slice(0, 120))}`),
+          isRetracted: false, isAutoDiscovered, humanStatus: null, reviewerNote: ''
+        };
+      }
 
       if (doiNotFound || (!crWork && !oaWork) || (!explicitDoi && !isAutoDiscovered && titleOverlap < 0.18 && combinedOverlap < 0.18)) {
         return {
